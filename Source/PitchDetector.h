@@ -1,44 +1,30 @@
-/*
-  ==============================================================================
-
-    PitchDetector.h
-    Created: 24 Oct 2023 12:05:47pm
-    Author:  barto
-
-  ==============================================================================
-*/
 
 #pragma once
 
-
-
 class PitchDetector
 {
-public:
-    
-    juce::dsp::FFT detect_fft;
+private:   
+    juce::dsp::FFT detectFft;
     static constexpr auto detectFftOrder = 12, detectFftSize = 1 << detectFftOrder, halfDetectFftSize = detectFftSize / 2;
     int idxOfMaxMagnitude;
     float currentMagnitude, max, firstHarmonic, secondHarmonic;
-    int bufferSize;
-    double my_sampleRate;
-
+    const int bufferSize;
+    double mySampleRate;
     std::vector<float> preMagnitudeBuffer;
     std::vector<float> magnitudeBuffer;
 
-
+public:
     PitchDetector() :
-        detect_fft(detectFftOrder),
+        detectFft(detectFftOrder),
         idxOfMaxMagnitude(0),
         currentMagnitude(0),
         max(0),
         bufferSize(960),
-        my_sampleRate(96000),
+        mySampleRate(96000),
         preMagnitudeBuffer{},
         magnitudeBuffer{},
         firstHarmonic(880.0f),
         secondHarmonic(2200.0f)
-    
     {
         resizeVectors();
     }
@@ -49,22 +35,19 @@ public:
         magnitudeBuffer.resize(halfDetectFftSize);
     }
 
-    void clearMagnitudeBuffer(std::vector <float>& my_buffer)
+    void clearMagnitudeBuffer(std::vector <float>& myBuffer)
     {
-        std::fill(my_buffer.begin(), my_buffer.end(), 0.0f);
+        std::fill(myBuffer.begin(), myBuffer.end(), 0.0f);
     }
     
-    void pushSamplesIntoBuffer(std::vector <float>& my_buffer, const float* channelData, int bufferSize)
+    void pushSamplesIntoBuffer(std::vector <float>& myBuffer, const float* channelData, int bufferSize)
     {
-        for (int s = 0; s < bufferSize; s++)
-        {
-            my_buffer[s] = channelData[s];
-        }
+        std::copy(channelData, channelData + bufferSize, myBuffer.begin());
     }
 
-    void performForwardFFT(std::vector <float>& my_buffer)
+    void performForwardFFT(std::vector <float>& myBuffer)
     {
-        detect_fft.performRealOnlyForwardTransform(my_buffer.data(), false);
+        detectFft.performRealOnlyForwardTransform(myBuffer.data(), false);
     }
 
     float calculateMagnitude(float real, float imag)
@@ -78,14 +61,15 @@ public:
         secondHarmonic = processPitchDetection(channelData, toUseSampleRate) * rowOfSecondHarmonic;
     }
 
-    void getMagnitudeBuffer(std::vector <float>& my_buffer, std::vector <float>& bufferToFill)
+    void getMagnitudeBuffer(std::vector <float>& myBuffer, std::vector <float>& bufferToFill)
     {
         int count = 0;
+        const int stepSize = 2;
 
-        for (int s = 0; s < detectFftSize; s += 2)
+        for (auto it = myBuffer.begin(); it != myBuffer.end(); it += stepSize)
         {
-            bufferToFill[count] = calculateMagnitude(my_buffer[s], my_buffer[s + 1]);
-                count++;
+            bufferToFill[count] = calculateMagnitude(*it, *(it + 1));
+            count++;
         }
     }
     
@@ -112,8 +96,6 @@ public:
         return float(idxOfMaxMagnitude) * float(sampleRate)/ detectFftSize;
     }
 
-
-
     float processPitchDetection(float* channelData,double toUseSampleRate)
     {
         clearMagnitudeBuffer(preMagnitudeBuffer);
@@ -121,6 +103,7 @@ public:
         performForwardFFT(preMagnitudeBuffer);
         getMagnitudeBuffer(preMagnitudeBuffer, magnitudeBuffer);
         getMaxMagnitude(magnitudeBuffer);
+
         return getFrequency(toUseSampleRate);
     }
   

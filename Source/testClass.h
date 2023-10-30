@@ -1,17 +1,17 @@
 
 #pragma once
+
 #include <vector>
 #include <numeric>
 #include <cmath>
 
 class TestClass
 {
-public:
-	
-	double  currentAngle = 0.0, angleDelta = 0.0;
+private:
+    double  currentAngle = 0.0, angleDelta = 0.0;
     std::vector <float> sinWave;
 
-
+public:	
     void testSin(int bufferSize, int sampleRate, float freq, float amplitude)
     {
         sinWave.resize(bufferSize);
@@ -27,11 +27,9 @@ public:
 
     void pushSinToBuffer(float* channelData, int bufferSize)
     {
-
         for (int s = 0; s < bufferSize; s++)
         {
             channelData[s] = sinWave[s];
-
         }
     }
 };

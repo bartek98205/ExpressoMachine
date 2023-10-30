@@ -1,17 +1,5 @@
-/*
-  ==============================================================================
-
-    RMS.h
-    Created: 26 Oct 2023 10:38:15am
-    Author:  barto
-
-  ==============================================================================
-*/
 
 #pragma once
-
-
-
 
 class RMSClass
 {
@@ -22,7 +10,6 @@ public:
     RMSClass() :
         maxRMS(0.4f),
         minRMS(0.000001f)
-
     {}
 
     void setMaxRMS(float recentRMS)
@@ -34,7 +21,7 @@ public:
             DBG(maxRMS);
         }
     }
-    
+
     void setMinRMS(float recentRMS)
     {
         if (recentRMS < minRMS)
@@ -51,7 +38,6 @@ public:
         setMaxRMS(recentRMS);
 
     }
-
 
     float my_getRMS(int channel, juce::AudioBuffer<float>& rmsBuffer, int bufferSize)
     {

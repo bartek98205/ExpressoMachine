@@ -1,16 +1,8 @@
-/*
-  ==============================================================================
-
-    This file contains the basic framework code for a JUCE plugin processor.
-
-  ==============================================================================
-*/
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "PitchDetector.h"
 
-//==============================================================================
 ExpressoMachineAudioProcessor::ExpressoMachineAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
@@ -30,20 +22,15 @@ ExpressoMachineAudioProcessor::ExpressoMachineAudioProcessor()
     mySampleRate(0),
     qFactor(0.1),
     notchPassFilter(juce::dsp::IIR::Coefficients<float>::makePeakFilter(96000, 2200.0f, 0.1f, 1.0f))
-  
-            
-    
+ 
 #endif
 {
 }
 
 ExpressoMachineAudioProcessor::~ExpressoMachineAudioProcessor()
 {
-
-
 }
 
-//==============================================================================
 const juce::String ExpressoMachineAudioProcessor::getName() const
 {
     return JucePlugin_Name;
@@ -104,7 +91,6 @@ void ExpressoMachineAudioProcessor::changeProgramName (int index, const juce::St
 {
 }
 
-//==============================================================================
 void ExpressoMachineAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     bufferSize = samplesPerBlock;
@@ -119,6 +105,7 @@ void ExpressoMachineAudioProcessor::prepareToPlay (double sampleRate, int sample
     notchPassFilter.reset();
     lowPassFilter.prepare(spec);
     lowPassFilter.reset();
+
     juce::dsp::StateVariableFilter::Parameters<float>::Type::lowPass;
     lowPassFilter.state->setCutOffFrequency(mySampleRate, 10000, 0.4);
 
@@ -161,16 +148,15 @@ void ExpressoMachineAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
+
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
    
     test.testSin(bufferSize, mySampleRate, 220, 0.1);
 
- 
     for (int channel = 0; channel < 1; ++channel)
     {
-        auto* channelData = buffer.getWritePointer (channel);
-
+       auto* channelData = buffer.getWritePointer (channel);
        float bufferRMS = rms.my_getRMS(channel, buffer, bufferSize);   
 
        rms.setBoundsOfRMS(bufferRMS);
@@ -180,7 +166,6 @@ void ExpressoMachineAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
        filterBlendValue = blend.dryWetRatio(bufferRMS, 0.1f, 8.0f);
 
        pitch.getHarmonics(2, 4, channelData, mySampleRate);
-
        pitchShifter.processExpressoEffcet(buffer,channelData, channel,cleanBlendValue, gainBlendValue);     
 
        juce::dsp::AudioBlock<float> block = buffer;
@@ -189,11 +174,9 @@ void ExpressoMachineAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
        
        juce::dsp::AudioBlock<float> lowBlock = buffer;
        lowPassFilter.process(juce::dsp::ProcessContextReplacing<float>(lowBlock));
-
     }
 }
 
-//==============================================================================
 bool ExpressoMachineAudioProcessor::hasEditor() const
 {
     return true; 
@@ -204,7 +187,6 @@ juce::AudioProcessorEditor* ExpressoMachineAudioProcessor::createEditor()
     return new ExpressoMachineAudioProcessorEditor (*this);
 }
 
-//==============================================================================
 void ExpressoMachineAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
   
@@ -215,8 +197,6 @@ void ExpressoMachineAudioProcessor::setStateInformation (const void* data, int s
 
 }
 
-//==============================================================================
-// This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new ExpressoMachineAudioProcessor();

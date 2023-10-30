@@ -1,20 +1,9 @@
-/*
-  ==============================================================================
-
-    filterClass.h
-    Created: 27 Oct 2023 4:08:14pm
-    Author:  barto
-
-  ==============================================================================
-*/
 
 #pragma once
-
 
 class myFilters
 {
 public:
-
     juce::dsp::ProcessorDuplicator <juce::dsp::IIR::Filter <float>, juce::dsp::IIR::Coefficients<float>> notchPassFilter;
     juce::dsp::ProcessorDuplicator <juce::dsp::StateVariableFilter::Filter<float>, juce::dsp::StateVariableFilter::Parameters<float>> lowPassFilter;
     float qFactor;
@@ -25,9 +14,4 @@ public:
     
     {}
 
-
-    void performFiltering ()
-    {
-
-    }
 };
