@@ -1,4 +1,10 @@
 # ExpressoMachine
+
+To run this project you need JUCE framework. In ProJucer create new project and add DSP module. Then add all files to you project.
+
+Some basic audio sample:
+
+
 This tool evaluates the input signal, applying tailored harmonics and filtering to enhance the audio.
 The extent of sound enrichment is dynamically influenced by the user's performance. 
 Real-time audio signal adjustments provide musicians with a fresh avenue for self-expression during their performances.
