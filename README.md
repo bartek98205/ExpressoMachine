@@ -1,4 +1,19 @@
 # ExpressoMachine
+
+To run this project you need JUCE framework. In ProJucer create new project and add DSP module. Then add all files to you project. 
+Program has been built with Visual Studio 2022, and JUCE framework with C++.
+
+Some basic audio sample
+
+Clean tone:
+https://github.com/bartek98205/ExpressoMachine/assets/100700947/af1a4948-84fe-4b1a-8973-386879cf189b
+
+with running program:
+https://github.com/bartek98205/ExpressoMachine/assets/100700947/e1fb17c5-b2a2-4ed8-984e-f4b53c17449a
+
+with running program:
+https://github.com/bartek98205/ExpressoMachine/assets/100700947/325dca0a-4ac1-480d-8347-9f517328f2a0
+
 This tool evaluates the input signal, applying tailored harmonics and filtering to enhance the audio.
 The extent of sound enrichment is dynamically influenced by the user's performance. 
 Real-time audio signal adjustments provide musicians with a fresh avenue for self-expression during their performances.
