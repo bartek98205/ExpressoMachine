@@ -113,8 +113,7 @@ void ExpressoMachineAudioProcessor::prepareToPlay (double sampleRate, int sample
 
 void ExpressoMachineAudioProcessor::releaseResources()
 {
-    // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
+    
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -124,15 +123,11 @@ bool ExpressoMachineAudioProcessor::isBusesLayoutSupported (const BusesLayout& l
     juce::ignoreUnused (layouts);
     return true;
   #else
-    // This is the place where you check if the layout is supported.
-    // In this template code we only support mono or stereo.
-    // Some plugin hosts, such as certain GarageBand versions, will only
-    // load plugins that support stereo bus layouts.
+   
     if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
      && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
         return false;
 
-    // This checks if the input layout matches the output layout
    #if ! JucePlugin_IsSynth
     if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
         return false;
@@ -165,7 +160,7 @@ void ExpressoMachineAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
        gainBlendValue = blend.dryWetRatio(bufferRMS, 1.0f, 5.5f);
        filterBlendValue = blend.dryWetRatio(bufferRMS, 0.1f, 8.0f);
 
-       pitch.getHarmonics(2, 4, channelData, mySampleRate);
+      /// pitch.getHarmonics(2, 4, channelData, mySampleRate);
        pitchShifter.processExpressoEffcet(buffer,channelData, channel,cleanBlendValue, gainBlendValue);     
 
        juce::dsp::AudioBlock<float> block = buffer;

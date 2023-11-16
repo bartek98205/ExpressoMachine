@@ -44,8 +44,10 @@ public:
     void changeProgramName (int index, const juce::String& newName) override;
 
     void getStateInformation (juce::MemoryBlock& destData) override;
-    void setStateInformation (const void* data, int sizeInBytes) override;   
+    void setStateInformation (const void* data, int sizeInBytes) override; 
+
     float cleanBlendValue, gainBlendValue, filterBlendValue;
+    bool gainType;
 
 private:
     PitchDetector pitch;
@@ -62,6 +64,7 @@ private:
     juce::dsp::ProcessorDuplicator <juce::dsp::IIR::Filter <float>, juce::dsp::IIR::Coefficients<float>> notchPassFilter;
     juce::dsp::ProcessorDuplicator <juce::dsp::StateVariableFilter::Filter<float>, juce::dsp::StateVariableFilter::Parameters<float>> lowPassFilter;
     float qFactor;
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ExpressoMachineAudioProcessor)
 };
