@@ -4,7 +4,8 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="opcSFu" name="ExpressoMachine">
     <GROUP id="{35AF8AF4-B5B7-0835-AE71-AC73B9C4EE1B}" name="Source">
-      <FILE id="KDP3da" name="myFilter.h" compile="0" resource="0" file="Source/myFilter.h"/>
+      <FILE id="B16DSd" name="spectrumDisplay.h" compile="0" resource="0"
+            file="Source/spectrumDisplay.h"/>
       <FILE id="u0mzuv" name="PitchShifter.h" compile="0" resource="0" file="Source/PitchShifter.h"/>
       <FILE id="WGoGM4" name="Gain.h" compile="0" resource="0" file="Source/Gain.h"/>
       <FILE id="lfJKVz" name="Blend.h" compile="0" resource="0" file="Source/Blend.h"/>

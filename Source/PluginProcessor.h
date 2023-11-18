@@ -8,8 +8,9 @@
 #include "Blend.h"
 #include "Gain.h"
 #include "PitchShifter.h"
+#include "spectrumDisplay.h"
 
-class ExpressoMachineAudioProcessor  : public juce::AudioProcessor
+class ExpressoMachineAudioProcessor  : public juce::AudioProcessor, public juce::JUCEApplication
                             #if JucePlugin_Enable_ARA
                              , public juce::AudioProcessorARAExtension
                             #endif
