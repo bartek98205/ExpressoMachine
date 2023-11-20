@@ -78,7 +78,4 @@ void ExpressoMachineAudioProcessorEditor::buttonClicked(juce::Button* button) {
 
     }
 
-
-
-
 }
