@@ -7,25 +7,11 @@ class specDisp : public juce::AudioAppComponent,
 {
 public:
 
-	float fifo;
-	float fftData;
-	int fifoIndex;
-	bool nextFFTBlockReady = false;
-	float scopeData;
-
-	enum
-	{
-		fftOrder = 11,
-		fftSize = 1 << fftOrder,
-		scopeSize = 512
-	};
 
 	specDisp()
 		:fftDisp(fftOrder),
-		window (fftSize, juce::dsp::WindowingFunction<float>::hann),
-		fftData(2 * fftSize),
-		fifo(fftSize),
-		scopeData(512)
+		window (fftSize, juce::dsp::WindowingFunction<float>::hann)
+		
 	{
 		setOpaque(true);
 		setAudioChannels(2, 0);  
@@ -41,6 +27,9 @@ public:
 
 	void prepareToPlay (int, double) override {};
 	void releaseResources() override {};
+
+
+	/// push all samples from buffer to fifo 
 
 	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill) override
 	{
@@ -90,24 +79,6 @@ public:
 		}
 	}
 
-	void pushNextSampleIntoFifo_disp(float sample) noexcept
-	{
-		
-		if (fifoIndex == fftSize)               
-		{
-			if (!nextFFTBlockReady)            
-			{
-				juce::zeromem(fftData, sizeof(fftData));
-				memcpy(fftData, fifo, sizeof(fifo));
-				nextFFTBlockReady = true;
-			}
-
-			fifoIndex = 0;
-		}
-
-		fifo[fifoIndex++] = sample;           
-	}
-
 	void drawNextFrameOfSpectrum()
 	{
 		
@@ -145,10 +116,23 @@ public:
 		}
 	}
 
+	enum
+	{
+		fftOrder = 11,
+		fftSize = 1 << fftOrder,
+		scopeSize = 512
+	};
+
 
 private:
 	juce::dsp::FFT fftDisp;
 	juce::dsp::WindowingFunction<float> window;
+
+	float fifo[fftSize];
+	float fftData[2* fftSize];
+	int fifoIndex = 0;
+	bool nextFFTBlockReady = false;
+	float scopeData [scopeSize];
 	                   
 
 	
