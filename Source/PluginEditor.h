@@ -16,6 +16,8 @@ public:
 private:
     ExpressoMachineAudioProcessor& audioProcessor;
 
+    specDisp disp;
+
     juce::Slider gainS;
     juce::Label gainL;
     juce::Slider dW;

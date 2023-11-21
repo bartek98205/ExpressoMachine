@@ -50,6 +50,11 @@ void ExpressoMachineAudioProcessorEditor::paint (juce::Graphics& g)
     g.setColour(juce::Colours::white);
     g.drawFittedText("ExpressoMachine", getLocalBounds(), juce::Justification::centredTop, 1);
     g.setFont(15.0f);
+    g.fillAll(juce::Colours::black);
+
+    g.setOpacity(1.0f);
+    g.setColour(juce::Colours::white);
+    disp.drawFrame(g);
 }
 
 void ExpressoMachineAudioProcessorEditor::resized()
