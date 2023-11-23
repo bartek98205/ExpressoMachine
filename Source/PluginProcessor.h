@@ -10,7 +10,7 @@
 #include "PitchShifter.h"
 #include "spectrumDisplay.h"
 
-class ExpressoMachineAudioProcessor  : public juce::AudioProcessor, public juce::JUCEApplication
+class ExpressoMachineAudioProcessor  : public juce::AudioProcessor
                             #if JucePlugin_Enable_ARA
                              , public juce::AudioProcessorARAExtension
                             #endif

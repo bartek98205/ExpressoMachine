@@ -15,6 +15,7 @@ public:
 
 private:
     ExpressoMachineAudioProcessor& audioProcessor;
+    const int width = 900, height = 700;
 
     specDisp disp;
 

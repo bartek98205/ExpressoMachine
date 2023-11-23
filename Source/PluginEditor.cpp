@@ -2,10 +2,10 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-ExpressoMachineAudioProcessorEditor::ExpressoMachineAudioProcessorEditor (ExpressoMachineAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+ExpressoMachineAudioProcessorEditor::ExpressoMachineAudioProcessorEditor(ExpressoMachineAudioProcessor& p)
+    : AudioProcessorEditor(&p), audioProcessor(p)
 {
-   
+
     addAndMakeVisible(gainS);
     gainS.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     gainS.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 72, 32);
@@ -22,7 +22,7 @@ ExpressoMachineAudioProcessorEditor::ExpressoMachineAudioProcessorEditor (Expres
 
     addAndMakeVisible(boostType);
     boostType.setButtonText("Classic tones");   /// Extra tones
- 
+
 
     addAndMakeVisible(dW);
     dW.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
@@ -34,7 +34,7 @@ ExpressoMachineAudioProcessorEditor::ExpressoMachineAudioProcessorEditor (Expres
     //dW_label.attachToComponent(&dW, false);
 
 
-    setSize(450, 300);
+    setSize(width,height);
 }
 
 ExpressoMachineAudioProcessorEditor::~ExpressoMachineAudioProcessorEditor()
@@ -59,11 +59,12 @@ void ExpressoMachineAudioProcessorEditor::paint (juce::Graphics& g)
 
 void ExpressoMachineAudioProcessorEditor::resized()
 {
-    gainS.setBounds(50, 24, 72, 256);
-    dW.setBounds(450 - (50 + 72), 24, 72, 256);
-    dW_label.setBounds(382, 140, 100, 24);
-    gainType.setBounds(225 - 36, 180, 72, 72);
-    boostType.setBounds(225 - 36, 50, 72, 72);
+    gainS.setBounds(50, height/5, 72, height/2 );
+    dW.setBounds(width - (50 + 72), height / 5, 72, height/2);
+    gainL.setBounds(65 , ((height / 5) - 25), 100, 24);
+    dW_label.setBounds((width - ( 42 + 72)) , ((height / 5) - 25) , 100, 24);
+    gainType.setBounds(width/ 3 , height - 200, 72, 72);
+    boostType.setBounds(width /2 + 75 , height - 200, 72, 72);
 }
 
 
