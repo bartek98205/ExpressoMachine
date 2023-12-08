@@ -7,6 +7,12 @@ class specDisp : public juce::AudioAppComponent,
 {
 public:
 
+	enum
+	{
+		fftOrder = 11,
+		fftSize = 1 << fftOrder,
+		scopeSize = 512
+	};
 
 	specDisp()
 		:fftDisp(fftOrder),
@@ -17,6 +23,7 @@ public:
 		setAudioChannels(2, 0);  
 		startTimerHz(30);
 		setSize(700, 500);
+		
 	}
 
 	~specDisp()
@@ -116,12 +123,7 @@ public:
 		}
 	}
 
-	enum
-	{
-		fftOrder = 11,
-		fftSize = 1 << fftOrder,
-		scopeSize = 512
-	};
+	
 
 
 private:
