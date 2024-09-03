@@ -1,9 +1,20 @@
+/*
+  ==============================================================================
+
+    PitchDetector.h
+    Created: 3 Sep 2024 9:57:16pm
+    Author:  barto
+
+  ==============================================================================
+*/
 
 #pragma once
+#include <vector>
+#include "juce_dsp\juce_dsp.h"
 
 class PitchDetector
 {
-private:   
+private:
     juce::dsp::FFT detectFft;
     static constexpr auto detectFftOrder = 12, detectFftSize = 1 << detectFftOrder, halfDetectFftSize = detectFftSize / 2;
     int idxOfMaxMagnitude;
@@ -14,97 +25,26 @@ private:
     std::vector<float> magnitudeBuffer;
 
 public:
-    PitchDetector() :
-        detectFft(detectFftOrder),
-        idxOfMaxMagnitude(0),
-        currentMagnitude(0),
-        max(0),
-        bufferSize(960),
-        mySampleRate(96000),
-        preMagnitudeBuffer{},
-        magnitudeBuffer{},
-        firstHarmonic(880.0f),
-        secondHarmonic(2200.0f)
-    {
-        resizeVectors();
-    }
-   
-    void resizeVectors()
-    {
-        preMagnitudeBuffer.resize(detectFftSize);
-        magnitudeBuffer.resize(halfDetectFftSize);
-    }
+    PitchDetector ();
 
-    void clearMagnitudeBuffer(std::vector <float>& myBuffer)
-    {
-        std::fill(myBuffer.begin(), myBuffer.end(), 0.0f);
-    }
-    
-    void pushSamplesIntoBuffer(std::vector <float>& myBuffer, const float* channelData, int bufferSize)
-    {
-        std::copy(channelData, channelData + bufferSize, myBuffer.begin());
-    }
+    void ResizeVectors ();
 
-    void performForwardFFT(std::vector <float>& myBuffer)
-    {
-        detectFft.performRealOnlyForwardTransform(myBuffer.data(), false);
-    }
+    void ClearMagnitudeBuffer (std::vector <float>& myBuffer);
 
-    float calculateMagnitude(float real, float imag)
-    {
-        return std::sqrt(std::pow(real, 2) + std::pow(imag, 2));
-    }
+    void PushSamplesIntoBuffer(std::vector <float>& myBuffer, const float* channelData, int bufferSize);
 
-    void getHarmonics(int rowOfFirstHarmonic, int rowOfSecondHarmonic, float* channelData, double toUseSampleRate)
-    {
-        firstHarmonic = processPitchDetection(channelData, toUseSampleRate) * rowOfFirstHarmonic;
-        secondHarmonic = processPitchDetection(channelData, toUseSampleRate) * rowOfSecondHarmonic;
-    }
+    void PerformForwardFFT(std::vector <float>& myBuffer);
 
-    void getMagnitudeBuffer(std::vector <float>& myBuffer, std::vector <float>& bufferToFill)
-    {
-        int count = 0;
-        const int stepSize = 2;
+    float CalculateMagnitude(float real, float imag);
 
-        for (auto it = myBuffer.begin(); it != myBuffer.end(); it += stepSize)
-        {
-            bufferToFill[count] = calculateMagnitude(*it, *(it + 1));
-            count++;
-        }
-    }
-    
-    void getMaxMagnitude(std::vector <float>& magnitudeBuffer)
-    {
-        max = 0;
-        idxOfMaxMagnitude = 0;
-        currentMagnitude = 0;
+    void GetHarmonics(int rowOfFirstHarmonic, int rowOfSecondHarmonic, float* channelData, double toUseSampleRate);
 
-        for (int s = 1; s < halfDetectFftSize; s++)
-        {
-            currentMagnitude = magnitudeBuffer[s];
+    void GetMagnitudeBuffer(std::vector <float>& myBuffer, std::vector <float>& bufferToFill);
 
-            if (currentMagnitude > max)
-            {
-                idxOfMaxMagnitude = s;
-                max = currentMagnitude;
-            }
-        }
-    }
+    void GetMaxMagnitude(std::vector <float>& magnitudeBuffer);
 
-    float getFrequency(double sampleRate)
-    {
-        return float(idxOfMaxMagnitude) * float(sampleRate)/ detectFftSize;
-    }
+    float GetFrequency(double sampleRate);
 
-    float processPitchDetection(float* channelData,double toUseSampleRate)
-    {
-        clearMagnitudeBuffer(preMagnitudeBuffer);
-        pushSamplesIntoBuffer(preMagnitudeBuffer, channelData,bufferSize);
-        performForwardFFT(preMagnitudeBuffer);
-        getMagnitudeBuffer(preMagnitudeBuffer, magnitudeBuffer);
-        getMaxMagnitude(magnitudeBuffer);
+    float ProcessPitchDetection(float* channelData, double toUseSampleRate);
 
-        return getFrequency(toUseSampleRate);
-    }
-  
 };

@@ -9,6 +9,8 @@
 
 using namespace std::complex_literals;
 
+/** !!!! Restructure file for improved reliability (incoming changes soon) !!! **/
+
 class PitchShifter
 {
 public:
@@ -111,7 +113,7 @@ public:
             return fmodf(phaseIn - M_PI, -2.0 * M_PI) + M_PI;
     }
 
-    void processExpressoEffcet(juce::AudioBuffer<float>& bufferToPitch, float* channelDataToPitch, int channelToPitch, float cleanBlend, float gainBlend)
+    void processExpressoEffecet(juce::AudioBuffer<float>& bufferToPitch, float* channelDataToPitch, int channelToPitch, float cleanBlend, float gainBlend)
     {
         for (int sample = 0; sample < bufferToPitch.getNumSamples(); sample++)
         {
